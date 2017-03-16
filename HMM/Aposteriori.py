@@ -1,17 +1,16 @@
+from filename import backward
+from filename import forward
+
 def Aposteriori(a,e,seq,states):
+	'''Implementation of the A posteriori decoding algorithm'''
 	B=backward(a,e,seq,states)
 	F=forward(a,e,seq,states)
 	M=[[0.0 for i in range(len(seq)+2)] for s in states]
-	#for s in range(len(states)):
-	#	M[s][0]=float(F[s][0]*B[s][0])/F[-1][-1]
 	for j in range(len(seq)+2):
 		for i in range(len(states)):
 			M[i][j]=float(F[i][j]*B[i][j])/F[-1][-1]
-			
-	#for s in range(len(states)):
-	#	M[s][-1]=float(F[s][-1]*B[s][-1])/F[-1][-1]
 	
-	mao='B'
+	back='B'
 	for j in range(1,len(seq)+1):
 		mas=0.0
 		for i in range(1,len(states)-1):
@@ -19,18 +18,21 @@ def Aposteriori(a,e,seq,states):
 				mas=M[i][j]
 				p=i
 				q=j
-		mao=mao+states[p]	
-	mao=mao+states[-1]	
-	print mao
-	print M
-	
+		back=back+states[p]	
+	back=back+states[-1]	
+	return back
+	return M
 
-			
+#input examples
 
-states=['B','Y','N','E']
+states=['B','Y','N','E']   #list of states, begin (B) and end (E) states are included
+
 a={('B','Y'):0.2, ('B','N'):0.8, ('Y','Y'):0.7, ('Y','N'):0.2, ('N','Y'):0.1, ('N','N'):0.8, ('Y','E'):0.1, ('N','E'):0.1}
+#dictionary of trnasitions probabilities between the states
+
 e={('Y','A'):0.1, ('Y','G'):0.4, ('Y','C'):0.4, ('Y','T'):0.1, ('N','A'):0.25, ('N','G'):0.25, ('N','C'):0.25, ('N','T'):0.25}
+#dictionary of the emissions probabilities of the characters
 
-seq='ATGCG'
+seq='ATGCG' #example of a sequence
 
-Aposteriori(a,e,seq,states)			
+		
