@@ -1,8 +1,7 @@
 
 def fibo(n):
+	'''A function that finds the corresponding value of the Fibonacci series given a number''' 
 	if n==1 or n==2:
-		print 1
+		return 1
 	else:
-		print fibo(n-1)+fibo(n-2)
-	
-
+		return fibo(n-1)+fibo(n-2)
