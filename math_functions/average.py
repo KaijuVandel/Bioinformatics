@@ -11,6 +11,7 @@ def average(x):
 
 if __name__=="__main__":				    
 	lista=sys.argv[1].split(',')
+	print lista
 	result=average(lista)
 	print result
 	
