@@ -2,7 +2,7 @@
 import sys
 
 def fibo(n):
-	'''A function that finds the corresponding value of the Fibonacci series given a number''' 
+	'''The most simple function that finds the corresponding value of the Fibonacci series given a number''' 
 	n=int(n)
 	if n==1 or n==2:
 		return 1
@@ -12,4 +12,4 @@ def fibo(n):
 if  __name__=="__main__":
 	number=sys.argv[1]
 	result=fibo(number)
-	print result
+	print "The", number, "th number of the Fibonacci series is", result
