@@ -26,7 +26,7 @@ def get_calpha(pdbfile,chain,rlist,atom="CA"): #rlist = residues list. return a 
 def run_sup3d(coord1,coord2):
 	sup=SVDSuperimposer()
 	sup.set(np.array(coord1),np.array(coord2)) #set is setting the group of coordinates because i have initialized SVD, it is empty
-	sup.run() #superimpose the coordinates, run fa tutto, il resto sol per stampare le coordinate. faccio l'rmsd sulle coordinate di vca1 e vc2 dopo trasformazione
+	sup.run() #superimpose the coordinates, run does all the work. Then we compute the RMSD between vc1 and vc2 after transformation
 	rmsd=sup.get_rms()
 	rot,tran=sup.get_rotran() #shows the matrix of rotation and vector for translation
 	tcoord=sup.get_transformed()
