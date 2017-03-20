@@ -4,10 +4,9 @@ import sys #from the input from command line
 import numpy as np
 from Bio.SVDSuperimposer import SVDSuperimposer
 
+#This program perfoms the superimposition between 2 structures, taking the atoms coordinates from the PDB files and calculating the RMSD. 
 
 def get_calpha(pdbfile,chain,rlist,atom="CA"): #rlist = residues list. return a list of 3d vectors. I can use now with 3 or 4 variables. if i use 4 the fourth would be 'CA', you automatically initialize it if it not defined.
-	'''This program perfoms the superimposition between 2 structures, taking the atoms coordinates from the PDB files and calculating the RMSD. 
-	rlist= residues list'''
 	vca=[]
 	fh=open(pdbfile,'r')
 	for line in fh:
