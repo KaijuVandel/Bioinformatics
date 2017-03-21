@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import sys, math
 
-#This program takes in input a file with a multiple sequence alignment given in fasta format, then creates a profile based on it a compute the entropy
+#This program takes in input a file with a multiple sequence alignment given in fasta format, then creates a profile based on it and computes the entropy
 
 def get_fasta(filename):
 	d={}
@@ -31,8 +31,12 @@ def get_entropy(aalist, aa='ACDEFGHIKLMNPQRSTVWY-'):
 
 if __name__=="__main__":
 	filename=sys.argv[1]
-	pos=int(sys.argv[2])-1
+	#pos=int(sys.argv[2])-1
 	d=get_fasta(filename)
-	pi=[i[pos] for i in d.values()]
-	s,v=get_entropy(pi)
-	print pos+1,pi,s,v
+	salign=d.values()
+	n=len(salign[0])
+	for pos in range(n):
+		pi=[i[pos] for i in salign]
+		ent,prof=get_entropy(pi)
+		print '%s\t%s\t%s' %(pos+1,''.join(pi),ent)
+		
