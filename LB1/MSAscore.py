@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-import sys, math
+import sys, math, random
 from Bio.SubsMat import MatrixInfo
 
 #This program takes in input a file with a multiple sequence alignment given in fasta format, then creates a profile based on it and computes the entropy
@@ -29,7 +29,7 @@ def get_entropy(aalist, aa='ACDEFGHIKLMNPQRSTVWY-'):
 				s=s-v[i]*math.log(v[i])
 		return s,v
 
-def get_score(aalist,subs,g=-1.0):
+def get_score(aalist,subs,g=0.0):
 	'''The function calculates the score of the alignment'''
 	#we simply calculate the score for all the possible pairs of sequences. 
 	s=0.0
@@ -46,14 +46,54 @@ def get_score(aalist,subs,g=-1.0):
 					s=s+subs[(aalist[j],aalist[i])]
 			#print aalist[i],aalist[j],s
 				#i can try also with this
-				#if subs.get((aalist[i], aalist[j],'')!='': 
+				#if subs.get((aalist[i], aalist[j],0)!=0: 
 					#s=s+subs[(aalist[i],aalist[j])]
-					#continue
+				#elif subs.get((aalist[j], aalist[i],0)!=0:
+					#s=s+subs[(aalist[j],aalist[i])]
+				#else:
+					#pass  #pass is a command to skip directly to the following lines, while continue would go back to the first loop
 				#if subs.get((aalist[j], aalist[i],'')!='': s=s+subs[(aalist[j],aalist[i])]
 					
 					
 				#if later on there is one gap i don't want to assign a negative score later
 	return s
+
+def score_ali(seqs, matrix):
+	'''calculates the total score'''
+	stot=0.0
+	for pos in range(len(seqs[0])):
+		pi=[i[pos] for i in seqs]
+		s=get_score(pi,matrix)
+		stot=stot+s
+		#print pos+1, ''.join(pi), ent
+		#print pos+1, ''.join(pi), ent, s
+	return stot
+	
+
+
+
+
+def shuffle_seq(seq):
+	'''A function to randomize the sequence'''
+	rseq=''
+	lseq=list(seq)
+	random.shuffle(lseq)
+	rseq=''.join(lseq)
+	return rseq
+
+def random_align(seqs):
+	'''randomize the MSA'''
+	rali=[]
+	n=len(seqs)
+	for i in range(n):
+		seq=seqs[i]
+		if i%2==0:
+			rali.append(shuffle_seq(seq))
+		else:
+			rali.append(seq)
+	return rali
+
+
 
 if __name__=="__main__":
 	filename=sys.argv[1]
@@ -63,13 +103,14 @@ if __name__=="__main__":
 	stot=0.0
 	n=len(salign[0])
 	b62=MatrixInfo.blosum62
-	for pos in range(n):
+	stot=score_ali(salign,b62)
+	for pos in range(len(n)):
 		pi=[i[pos] for i in salign]
 		ent,prof=get_entropy(pi)
-		s=get_score(pi,b62)
-		stot=stot+s
-		#print '%s\t%s\t%s' %(pos+1,''.join(pi),ent)
-		#print pos+1, ''.join(pi), ent
-		print pos+1, ''.join(pi), ent, s
-	print "The total score is", stot
-		
+	vscore=[]
+	for i in range(100): #repeat 100 times to make it more random
+		rali=random_align(salign)
+		rtot=score_ali(rali,b62)
+		vscore.append(rtot)
+	print vscore
+	print 'The alignment score is', stot
